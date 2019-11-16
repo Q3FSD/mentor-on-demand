@@ -1,0 +1,106 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">Mentor On Demand</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <!-- Dropdown -->
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+                    Welcome {{userName}}
+                </a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" (click)="logout()">Logout</a>
+                </div>
+            </li>
+        </ul>
+        <input class="form-control mr-sm-2 active" type="search" placeholder="Search" aria-label="Search" required
+            [(ngModel)]="keyword">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="button" (click)="search()">Search</button>
+    </div>
+</nav>
+<ul class="nav nav-tabs justify-content-center">
+    <li class="nav-item">
+        <button type="button" class="nav-link" (click)="getSkills()">My Skills</button>
+    </li>
+    <li class="nav-item">
+        <button type="button" class="nav-link active" (click)="getCalendar()">My Calendar</button>
+    </li>
+    <li class="nav-item">
+        <button type="button" class="nav-link" href="#">Search Trainings</button>
+    </li>
+    <li class="nav-item">
+        <button type="button" class="nav-link" href="#">Current Trainings</button>
+    </li>
+    <li class="nav-item">
+        <button type="button" class="nav-link" href="#">Completed Trainings</button>
+    </li>
+</ul>
+<br />
+<div class="row" *ngIf="currentTab==1">
+    <div class="col text-center">
+        <button type="button" class="btn btn-primary" (click)="getSkills()">Add Skill</button>
+    </div>
+</div>
+<div class="row" *ngIf="currentTab==2">
+    <div class="col-sm-6">
+        <form class="form-inline justify-content-center">
+            <div class="form-group">
+                <div class="input-group">
+                    <input class="form-control" placeholder="Start Date" name="dp" [(ngModel)]="startDate" ngbDatepicker
+                        #d="ngbDatepicker">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button"><i
+                                class='fas fa-calendar-alt'></i></button>
+                    </div>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <input class="form-control" placeholder="End Date" name="dp" [(ngModel)]="endDate" ngbDatepicker
+                        #d="ngbDatepicker">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button"><i
+                                class='fas fa-calendar-alt'></i></button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="col-sm-2">
+        Start Time : <ngb-timepicker [(ngModel)]="startTime"></ngb-timepicker>
+    </div>
+    <div class="col-sm-2">
+        End Time : <ngb-timepicker [(ngModel)]="endTime"></ngb-timepicker>
+    </div>
+    <div class="col-sm-2">
+        <button type="button" class="btn btn-primary" (click)="addCalendar()">Add
+            Calendar</button>
+    </div>
+</div>
+<div class="list-group">
+    <li class="list-group-item list-group-item-action" *ngFor="let calendar of calendars; let i = index">
+        <div class="d-flex w-100 justify-content-between">
+            <h5 class="mb-1">Date : {{calendar.startDate}} ~ {{calendar.endDate}}</h5>
+            <small><i class='fas fa-trash-alt' style='font-size:24px;color:red' data-toggle="modal"
+                    [attr.data-target]="'#myModal' +i"></i></small>
+        </div>
+        <p class="mb-1">Time : {{calendar.startTime}} ~ {{calendar.endTime}}</p>
+        <div class="modal fade" id="{{'myModal' +i}}">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Do you want to remove this user?</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        Your operation can not undo.
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Yes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </li>
+</div>

@@ -1,0 +1,27 @@
+<div class="container">
+    <br />
+    <div class="input-group input-group-lg">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="username">*</span>
+        </div>
+        <input type="password" class="form-control" placeholder="New Password" aria-describedby="username" required
+            [(ngModel)]="newPassword">
+    </div>
+    <br />
+    <div class="input-group input-group-lg">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="password">*</span>
+        </div>
+        <input type="password" class="form-control" placeholder="Confirm Password" aria-describedby="password" required
+            [(ngModel)]="confirmPassword">
+    </div>
+    <br />
+    <div class="row">
+        <div class="col">
+            <button type="button" class="btn btn-primary" (click)="reset()">Reset</button>
+        </div>
+        <div class="col">
+            <button type="button" class="btn btn-secondary" [routerLink]="['']">Back</button>
+        </div>
+    </div>
+</div>

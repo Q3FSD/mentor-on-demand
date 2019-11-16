@@ -1,0 +1,33 @@
+<div class="container">
+    <br />
+    <div class="input-group input-group-lg">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="username">@</span>
+        </div>
+        <input type="email" class="form-control" placeholder="User Name" aria-describedby="username" required
+            [(ngModel)]="userName">
+    </div>
+    <br />
+    <div class="input-group input-group-lg">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="password">*</span>
+        </div>
+        <input type="password" class="form-control" placeholder="Password" aria-describedby="password" required
+            [(ngModel)]="password">
+    </div>
+    <br />
+    <label for="name">Select role</label>
+    <select class="form-control" [(ngModel)]="role">
+        <option selected="selected">Student</option>
+        <option>Mentor</option>
+    </select>
+    <br />
+    <div class="row">
+        <div class="col">
+            <button type="button" class="btn btn-primary" (click)="register()">Signup</button>
+        </div>
+        <div class="col">
+            <button type="button" class="btn btn-secondary" [routerLink]="['']">Back</button>
+        </div>
+    </div>
+</div>
