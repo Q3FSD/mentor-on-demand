@@ -3,6 +3,7 @@ import { AppService } from '../app.service';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { User } from '../models/User';
+import { Technologies } from '../models/Technologies';
 
 @Component({
   selector: 'app-admin',
@@ -14,15 +15,18 @@ export class AdminComponent implements OnInit {
   constructor(private appService: AppService, private router: Router) { }
 
   users: User[] = [];
+  technologies: Technologies[] = [];
 
   ngOnInit() {
     this.userName = sessionStorage.getItem("userName");
-    this.getUsers().subscribe(data => {
-      this.users = data;
-    });
+    this.getUsers();
   }
 
   userName: string
+  currentTab: number
+  skillName: string
+  description: string
+  prerequisites: string
   keyword: string
   course: string
   fee: string
@@ -32,22 +36,39 @@ export class AdminComponent implements OnInit {
     this.router.navigate(['']);
   }
 
-  search() {
-    window.alert("keyword = " + this.keyword);
-    this.appService.getCourses(this.keyword);
-  }
-
-  getUsers(): Observable<User[]> {
-    return this.appService.getUsers();
+  getUsers() {
+    this.currentTab = 1;
+    this.appService.getUsers().subscribe(data => {
+      this.users = data;
+    });
   }
 
   removeUser(userName) {
     return this.appService.removeUser(userName);
   }
 
-  addOrUpdateCourse() {
-    window.alert("course = " + this.course);
-    this.appService.addOrUpdateCourse(this.course);
+  getTechnologies() {
+    this.currentTab = 2;
+    this.appService.getTechnologies().subscribe(data => {
+      this.technologies = data;
+    });
+  }
+
+  addTechnologies() {
+    const tech: Technologies = {
+      skillName: this.skillName,
+      description: this.description,
+      prerequisites: this.prerequisites
+    };
+    return this.appService.addTechnologies(tech);
+  }
+
+  removeTechnologies(skillName) {
+    return this.appService.removeTechnologies(skillName);
+  }
+
+  search() {
+
   }
 
   changeFee() {

@@ -25,8 +25,6 @@ export class UserComponent implements OnInit {
   }
 
   search() {
-    window.alert("keyword = " + this.keyword);
-    this.appService.getCourses(this.keyword);
   }
 
   book() {

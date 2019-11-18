@@ -24,10 +24,12 @@
 </nav>
 <ul class="nav nav-tabs justify-content-center">
     <li class="nav-item">
-        <button type="button" class="nav-link" (click)="getSkills()">My Skills</button>
+        <button type="button" class="nav-link" [ngClass]="{'active': currentTab==1}" (click)="getTechnologies()">My
+            Skills</button>
     </li>
     <li class="nav-item">
-        <button type="button" class="nav-link active" (click)="getCalendar()">My Calendar</button>
+        <button type="button" class="nav-link" [ngClass]="{'active': currentTab==2}" (click)="getCalendar()">My
+            Calendar</button>
     </li>
     <li class="nav-item">
         <button type="button" class="nav-link" href="#">Search Trainings</button>
@@ -40,27 +42,33 @@
     </li>
 </ul>
 <br />
-<div class="row" *ngIf="currentTab==1">
-    <div class="col text-center">
-        <button type="button" class="btn btn-primary" (click)="getSkills()">Add Skill</button>
+<form *ngIf="currentTab==1">
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    <div class="form-check form-check-inline" *ngFor="let tech of technologies">
+        <label class="form-check-label">
+            <input type="checkbox" class="form-check-input" value="{{tech.skillName}}"
+                [checked]="skills.includes(tech.skillName)"
+                (change)="onChange(tech.skillName,$event)">{{tech.skillName}}
+        </label>
     </div>
-</div>
+    <button type="button" class="btn btn-primary" (click)="saveSkills()">Save</button>
+</form>
 <div class="row" *ngIf="currentTab==2">
     <div class="col-sm-6">
         <form class="form-inline justify-content-center">
             <div class="form-group">
                 <div class="input-group">
-                    <input class="form-control" placeholder="Start Date" name="dp" [(ngModel)]="startDate" ngbDatepicker
-                        #d="ngbDatepicker">
+                    <input class="form-control" placeholder="Start Date" name="dp1" [(ngModel)]="startDate"
+                        ngbDatepicker #dp1="ngbDatepicker">
                     <div class="input-group-append">
-                        <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button"><i
+                        <button class="btn btn-outline-secondary" (click)="dp1.toggle()" type="button"><i
                                 class='fas fa-calendar-alt'></i></button>
                     </div>
                     &nbsp;&nbsp;&nbsp;&nbsp;
-                    <input class="form-control" placeholder="End Date" name="dp" [(ngModel)]="endDate" ngbDatepicker
-                        #d="ngbDatepicker">
+                    <input class="form-control" placeholder="End Date" name="dp2" [(ngModel)]="endDate" ngbDatepicker
+                        #dp2="ngbDatepicker">
                     <div class="input-group-append">
-                        <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button"><i
+                        <button class="btn btn-outline-secondary" (click)="dp2.toggle()" type="button"><i
                                 class='fas fa-calendar-alt'></i></button>
                     </div>
                 </div>
@@ -78,26 +86,30 @@
             Calendar</button>
     </div>
 </div>
-<div class="list-group">
+<div class="list-group" *ngIf="currentTab==2">
     <li class="list-group-item list-group-item-action" *ngFor="let calendar of calendars; let i = index">
         <div class="d-flex w-100 justify-content-between">
-            <h5 class="mb-1">Date : {{calendar.startDate}} ~ {{calendar.endDate}}</h5>
+            <h5 class="mb-1">Available Time : {{calendar.startDate | date:'yyyy-MM-dd HH:mm':'CST'}} ~
+                {{calendar.endDate | date:'yyyy-MM-dd HH:mm':'CST'}}</h5>
             <small><i class='fas fa-trash-alt' style='font-size:24px;color:red' data-toggle="modal"
                     [attr.data-target]="'#myModal' +i"></i></small>
         </div>
-        <p class="mb-1">Time : {{calendar.startTime}} ~ {{calendar.endTime}}</p>
+        <input #startDate type="hidden" class="form-control"
+            value="{{calendar.startDate | date:'yyyy-MM-dd HH:mm':'CST'}}">
+        <input #endDate type="hidden" class="form-control" value="{{calendar.endDate | date:'yyyy-MM-dd HH:mm':'CST'}}">
         <div class="modal fade" id="{{'myModal' +i}}">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title">Do you want to remove this user?</h4>
+                        <h4 class="modal-title">Do you want to remove this calendar?</h4>
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
                     </div>
                     <div class="modal-body">
                         Your operation can not undo.
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Yes</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                            (click)="removeCalendar(startDate.value,endDate.value)">Yes</button>
                     </div>
                 </div>
             </div>
