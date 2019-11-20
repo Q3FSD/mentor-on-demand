@@ -32,8 +32,8 @@
             Technology</button>
     </li>
     <li class="nav-item">
-        <button type="button" class="nav-link" [ngClass]="{'active': currentTab==3}" (click)="changeFee()">Change
-            Fee</button>
+        <button type="button" class="nav-link" [ngClass]="{'active': currentTab==3}" (click)="search()">Manage
+            Training</button>
     </li>
 </ul>
 <div class="list-group" *ngIf="currentTab==1">
@@ -68,18 +68,19 @@
     <div class="col-sm-10">
         <div class="input-group input-group-lg">
             &nbsp;&nbsp;&nbsp;&nbsp;
-            <input type="text" class="form-control" placeholder="Technology Name" required [(ngModel)]="skillName">
+            <input type="text" class="form-control" placeholder="Technology Name" required
+                [(ngModel)]="technology.skillName">
             &nbsp;&nbsp;&nbsp;&nbsp;<input type="text" class="form-control" placeholder="Description"
-                [(ngModel)]="description">
+                [(ngModel)]="technology.description">
             &nbsp;&nbsp;&nbsp;&nbsp;<input type="text" class="form-control" placeholder="Prerequisites"
-                [(ngModel)]="prerequisites">
+                [(ngModel)]="technology.prerequisites">
         </div>
     </div>
     <div class="col-sm-2">
         <button type="button" class="btn btn-primary" (click)="addTechnologies()">Add Technology</button>
     </div>
+    <br />
 </div>
-<br />
 <div class="list-group" *ngIf="currentTab==2">
     <li class="list-group-item list-group-item-action" *ngFor="let tech of technologies; let i = index">
         <div class="d-flex w-100 justify-content-between">
@@ -102,6 +103,55 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal"
                             (click)="removeTechnologies(tech.skillName)">Yes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </li>
+</div>
+<div class="row" *ngIf="currentTab==3">
+    <div class="col-sm-8">
+        <div class="input-group input-group-lg">
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <input type="text" class="form-control" placeholder="Training Name" required [(ngModel)]="training.name">
+            &nbsp;&nbsp;&nbsp;&nbsp;<input type="text" class="form-control" placeholder="Description"
+                [(ngModel)]="training.description">
+            &nbsp;&nbsp;&nbsp;&nbsp;<input type="text" class="form-control" placeholder="Fees"
+                [(ngModel)]="training.fees">
+        </div>
+    </div>
+    <div class="col-sm-2">
+        <ng-select [items]="technologies" bindLabel="skillName" autofocus bindValue="skillName"
+            [(ngModel)]="training.skillName">
+        </ng-select>
+    </div>
+    <div class="col-sm-2">
+        <button type="button" class="btn btn-primary" (click)="addTrainings()">Add Training</button>
+    </div>
+    <br />
+</div>
+<div class="list-group" *ngIf="currentTab==3">
+    <li class="list-group-item list-group-item-action" *ngFor="let training of trainings; let i = index">
+        <div class="d-flex w-100 justify-content-between">
+            <h5 class="mb-1">Name : {{training.name}}</h5>
+            <small><i class='fas fa-trash-alt' style='font-size:24px;color:red' data-toggle="modal"
+                    [attr.data-target]="'#myModal' +i"></i></small>
+        </div>
+        <p class="mb-1">Fee : $ {{training.fees}}</p>
+        <small>Technology : {{training.skillName}}</small>
+        <div class="modal fade" id="{{'myModal' +i}}">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Do you want to remove this training?</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        Your operation can not undo.
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                            (click)="removeTrainings(training.id)">Yes</button>
                     </div>
                 </div>
             </div>

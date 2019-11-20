@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { AppService } from '../app.service';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
 import { User } from '../models/User';
 import { Technologies } from '../models/Technologies';
+import { Trainings } from '../models/Trainings';
 
 @Component({
   selector: 'app-admin',
@@ -16,20 +16,21 @@ export class AdminComponent implements OnInit {
 
   users: User[] = [];
   technologies: Technologies[] = [];
+  trainings: Trainings[] = [];
 
   ngOnInit() {
     this.userName = sessionStorage.getItem("userName");
-    this.getUsers();
+    this.appService.getUsers().subscribe(data =>
+      this.users = data);
+    this.appService.getTechnologies().subscribe(data =>
+      this.technologies = data);
   }
 
   userName: string
-  currentTab: number
-  skillName: string
-  description: string
-  prerequisites: string
-  keyword: string
-  course: string
-  fee: string
+  currentTab: number = 1
+  technology: Technologies = new Technologies();
+  training: Trainings = new Trainings();
+  keyword: string = ""
 
   logout() {
     sessionStorage.clear();
@@ -38,9 +39,6 @@ export class AdminComponent implements OnInit {
 
   getUsers() {
     this.currentTab = 1;
-    this.appService.getUsers().subscribe(data => {
-      this.users = data;
-    });
   }
 
   removeUser(userName) {
@@ -49,18 +47,10 @@ export class AdminComponent implements OnInit {
 
   getTechnologies() {
     this.currentTab = 2;
-    this.appService.getTechnologies().subscribe(data => {
-      this.technologies = data;
-    });
   }
 
   addTechnologies() {
-    const tech: Technologies = {
-      skillName: this.skillName,
-      description: this.description,
-      prerequisites: this.prerequisites
-    };
-    return this.appService.addTechnologies(tech);
+    return this.appService.addTechnologies(this.technology);
   }
 
   removeTechnologies(skillName) {
@@ -68,11 +58,16 @@ export class AdminComponent implements OnInit {
   }
 
   search() {
-
+    this.currentTab = 3;
+    this.appService.search(this.keyword).subscribe(data =>
+      this.trainings = data);
   }
 
-  changeFee() {
-    window.alert("course = " + this.course + " fee = " + this.fee);
-    this.appService.changeFee(this.course, this.fee);
+  addTrainings() {
+    return this.appService.addTrainings(this.training);
+  }
+
+  removeTrainings(id) {
+    return this.appService.removeTrainings(id);
   }
 }

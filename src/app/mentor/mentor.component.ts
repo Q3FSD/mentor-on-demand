@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { AppService } from '../app.service';
 import { Router } from '@angular/router';
 import { Calendar } from '../models/Calendar';
-import { NgbDateStruct, NgbTimeStruct, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDateStruct, NgbTimeStruct } from '@ng-bootstrap/ng-bootstrap';
 import { Technologies } from '../models/Technologies';
+import { Trainings } from '../models/Trainings';
 
 @Component({
   selector: 'app-mentor',
@@ -12,10 +13,11 @@ import { Technologies } from '../models/Technologies';
 })
 export class MentorComponent implements OnInit {
 
-  constructor(private appService: AppService, private router: Router, private calendar: NgbCalendar) { }
+  constructor(private appService: AppService, private router: Router) { }
 
   technologies: Technologies[] = [];
   calendars: Calendar[] = [];
+  trainings: Trainings[] = [];
 
   ngOnInit() {
     this.userName = sessionStorage.getItem("userName");
@@ -29,8 +31,9 @@ export class MentorComponent implements OnInit {
   startTime: NgbTimeStruct
   endTime: NgbTimeStruct
   skills: string[] = []
-  keyword: string
-  course: string
+  keyword: string = ""
+  books: boolean[] = []
+  ids: number[] = []
 
   logout() {
     sessionStorage.clear();
@@ -97,5 +100,34 @@ export class MentorComponent implements OnInit {
   }
 
   search() {
+    this.currentTab = 3;
+    this.appService.search(this.keyword).subscribe(data => {
+      this.trainings = data;
+      data.forEach((val, idx, array) => {
+        if (val.mentorName == this.userName) {
+          this.books[idx] = true
+        } else {
+          this.books[idx] = false
+        }
+      });
+    });
+  }
+
+  bookTrainings() {
+    this.ids = [];
+    this.books.forEach((val, idx, array) => {
+      if (val) {
+        this.ids.push(this.trainings[idx].id);
+      }
+    });
+    if (this.ids.length == 0) {
+      alert("Please switch on at least one training.");
+    } else {
+      return this.appService.mentorBook(this.userName, this.ids.toString());
+    }
+  }
+
+  removeTrainings(id) {
+    return this.appService.removeTrainings(id);
   }
 }

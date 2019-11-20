@@ -32,13 +32,8 @@
             Calendar</button>
     </li>
     <li class="nav-item">
-        <button type="button" class="nav-link" href="#">Search Trainings</button>
-    </li>
-    <li class="nav-item">
-        <button type="button" class="nav-link" href="#">Current Trainings</button>
-    </li>
-    <li class="nav-item">
-        <button type="button" class="nav-link" href="#">Completed Trainings</button>
+        <button type="button" class="nav-link" [ngClass]="{'active': currentTab==3}" (click)="search()">Search
+            Trainings</button>
     </li>
 </ul>
 <br />
@@ -110,6 +105,40 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal"
                             (click)="removeCalendar(startDate.value,endDate.value)">Yes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </li>
+</div>
+<div class="row" *ngIf="currentTab==3">
+    <div class="col text-center">
+        <button type="button" class="btn btn-primary" (click)="bookTrainings()">Book trainings</button>
+    </div>
+</div>
+<div class="list-group" *ngIf="currentTab==3">
+    <li class="list-group-item list-group-item-action" *ngFor="let training of trainings; let i = index">
+        <div class="d-flex w-100 justify-content-between">
+            <h5 class="mb-1">Name : {{training.name}}</h5>
+            <small>
+                <ui-switch [(ngModel)]="books[i]"></ui-switch>
+            </small>
+        </div>
+        <p class="mb-1">Fee : $ {{training.fees}}</p>
+        <small>Student : {{training.userName}}</small>
+        <div class="modal fade" id="{{'myModal' +i}}">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Do you want to remove this training?</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        Your operation can not undo.
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                            (click)="removeTrainings(training.id)">Yes</button>
                     </div>
                 </div>
             </div>

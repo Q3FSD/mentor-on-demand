@@ -12,6 +12,8 @@ import { UserComponent } from './user/user.component';
 import { MentorComponent } from './mentor/mentor.component';
 import { AdminComponent } from './admin/admin.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { UiSwitchModule } from 'ngx-toggle-switch';
 
 @NgModule({
   declarations: [
@@ -26,6 +28,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
   imports: [
     FormsModule,
     NgbModule,
+    NgSelectModule,
+    UiSwitchModule,
     ReactiveFormsModule,
     BrowserModule,
     HttpClientModule,

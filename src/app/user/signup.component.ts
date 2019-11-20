@@ -16,7 +16,7 @@ export class SignupComponent implements OnInit {
 
   userName: string
   password: string
-  role: string
+  role: string = "Student"
 
   register() {
     const user: User = {

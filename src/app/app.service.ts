@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { User } from './models/User';
 import { Calendar } from './models/Calendar';
 import { Technologies } from './models/Technologies';
+import { Trainings } from './models/Trainings';
 
 @Injectable({
   providedIn: 'root'
@@ -13,11 +14,11 @@ export class AppService {
 
   constructor(private http: HttpClient, private router: Router) { }
 
-  private baseUrl = "http://localhost:8080";
-  courses = ["Java", "Python", "Node.js"];
+  private userUrl = "http://localhost:8080";
+  private trainingUrl = "http://localhost:8081";
 
   register(user: User) {
-    this.http.post<User>(this.baseUrl + "/v1/user/add",
+    this.http.post<User>(this.userUrl + "/v1/user/add",
       user)
       .subscribe(
         (data) => {
@@ -45,7 +46,7 @@ export class AppService {
   }
 
   login(user: User) {
-    this.http.post<User>(this.baseUrl + "/v1/user/login",
+    this.http.post<User>(this.userUrl + "/v1/user/login",
       user)
       .subscribe(
         (data) => {
@@ -76,7 +77,7 @@ export class AppService {
   }
 
   reset(user: User) {
-    this.http.post<User>(this.baseUrl + "/v1/user/reset",
+    this.http.post<User>(this.userUrl + "/v1/user/reset",
       user)
       .subscribe(
         (data) => {
@@ -106,11 +107,11 @@ export class AppService {
   }
 
   getUsers(): Observable<User[]> {
-    return this.http.get<User[]>(this.baseUrl + "/v1/user/all");
+    return this.http.get<User[]>(this.userUrl + "/v1/user/all");
   }
 
   removeUser(userName) {
-    return this.http.delete(this.baseUrl + "/v1/user/remove/" + userName)
+    return this.http.delete(this.userUrl + "/v1/user/remove/" + userName)
       .subscribe(
         (data) => {
           console.log("POST call successful value returned in body",
@@ -127,7 +128,7 @@ export class AppService {
   }
 
   getCalendar(userName): Observable<Calendar[]> {
-    return this.http.get<Calendar[]>(this.baseUrl + "/v1/mc/all/" + userName);
+    return this.http.get<Calendar[]>(this.userUrl + "/v1/mc/all/" + userName);
   }
 
   addCalendar(userName, startDate, endDate) {
@@ -135,7 +136,7 @@ export class AppService {
       headers: new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' })
     };
     const params = "userName=" + userName + "&startDate=" + startDate + "&endDate=" + endDate;
-    return this.http.post<Calendar>(this.baseUrl + "/v1/mc/add", params, httpOptions)
+    return this.http.post<Calendar>(this.userUrl + "/v1/mc/add", params, httpOptions)
       .subscribe(
         (data) => {
           console.log("POST call successful value returned in body",
@@ -152,7 +153,7 @@ export class AppService {
   }
 
   removeCalendar(userName, startDate, endDate) {
-    return this.http.delete(this.baseUrl + "/v1/mc/remove/" + userName + "/" + startDate + "/" + endDate)
+    return this.http.delete(this.userUrl + "/v1/mc/remove/" + userName + "/" + startDate + "/" + endDate)
       .subscribe(
         (data) => {
           console.log("POST call successful value returned in body",
@@ -169,11 +170,11 @@ export class AppService {
   }
 
   getTechnologies(): Observable<Technologies[]> {
-    return this.http.get<Technologies[]>(this.baseUrl + "/v1/tech/all");
+    return this.http.get<Technologies[]>(this.userUrl + "/v1/tech/all");
   }
 
   addTechnologies(technologies: Technologies) {
-    return this.http.post<Technologies>(this.baseUrl + "/v1/tech/add",
+    return this.http.post<Technologies>(this.userUrl + "/v1/tech/add",
       technologies)
       .subscribe(
         (data) => {
@@ -191,7 +192,7 @@ export class AppService {
   }
 
   removeTechnologies(skillName) {
-    return this.http.delete<Technologies>(this.baseUrl + "/v1/tech/remove/" + skillName)
+    return this.http.delete<Technologies>(this.userUrl + "/v1/tech/remove/" + skillName)
       .subscribe(
         (data) => {
           console.log("POST call successful value returned in body",
@@ -208,7 +209,7 @@ export class AppService {
   }
 
   getSkills(userName) {
-    return this.http.get<JSON[]>(this.baseUrl + "/v1/ms/all/" + userName);
+    return this.http.get<JSON[]>(this.userUrl + "/v1/ms/all/" + userName);
   }
 
   saveSkills(userName, skillNames) {
@@ -216,7 +217,7 @@ export class AppService {
       headers: new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' })
     };
     const params = "userName=" + userName + "&skillNames=" + skillNames;
-    return this.http.post(this.baseUrl + "/v1/ms/save", params, httpOptions)
+    return this.http.post(this.userUrl + "/v1/ms/save", params, httpOptions)
       .subscribe(
         (data) => {
           console.log("POST call successful value returned in body",
@@ -226,6 +227,87 @@ export class AppService {
         response => {
           console.log("POST call in error", response);
           alert("Your skills saved.");
+        },
+        () => {
+          console.log("The POST observable is now completed.");
+        });
+  }
+
+  addTrainings(trainings: Trainings) {
+    return this.http.post<Trainings>(this.trainingUrl + "/v1/training/add",
+      trainings)
+      .subscribe(
+        (data) => {
+          console.log("POST call successful value returned in body",
+            data);
+          window.location.reload();
+        },
+        response => {
+          console.log("POST call in error", response);
+          alert("Add training failed.");
+        },
+        () => {
+          console.log("The POST observable is now completed.");
+        });
+  }
+
+  removeTrainings(id) {
+    return this.http.delete<Trainings>(this.trainingUrl + "/v1/training/remove/" + id)
+      .subscribe(
+        (data) => {
+          console.log("POST call successful value returned in body",
+            data);
+          window.location.reload();
+        },
+        response => {
+          console.log("POST call in error", response);
+          window.location.reload();
+        },
+        () => {
+          console.log("The POST observable is now completed.");
+        });
+  }
+
+  search(keyword): Observable<Trainings[]> {
+    return this.http.get<Trainings[]>(this.trainingUrl + "/v1/training/search?keyword=" + keyword);
+  }
+
+  mentorBook(mentorName, ids) {
+    const httpOptions = {
+      headers: new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' })
+    };
+    const params = "mentorName=" + mentorName + "&ids=" + ids;
+    return this.http.post(this.trainingUrl + "/v1/training/mentor", params, httpOptions)
+      .subscribe(
+        (data) => {
+          console.log("POST call successful value returned in body",
+            data);
+          alert("Your training is booked.");
+        },
+        response => {
+          console.log("POST call in error", response);
+          alert("Your training is booked.");
+        },
+        () => {
+          console.log("The POST observable is now completed.");
+        });
+  }
+
+  studentBook(studentName, trainingId) {
+    const httpOptions = {
+      headers: new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' })
+    };
+    const params = "studentName=" + studentName + "&trainingId=" + trainingId;
+    return this.http.post(this.trainingUrl + "/v1/training/student", params, httpOptions)
+      .subscribe(
+        (data) => {
+          console.log("POST call successful value returned in body",
+            data);
+          alert("Your training is booked.");
+        },
+        response => {
+          console.log("POST call in error", response);
+          alert("Your training is booked.");
         },
         () => {
           console.log("The POST observable is now completed.");
