@@ -5,6 +5,7 @@ import { Calendar } from '../models/Calendar';
 import { NgbDateStruct, NgbTimeStruct } from '@ng-bootstrap/ng-bootstrap';
 import { Technologies } from '../models/Technologies';
 import { Trainings } from '../models/Trainings';
+import { Payment } from '../models/Payment';
 
 @Component({
   selector: 'app-mentor',
@@ -15,9 +16,10 @@ export class MentorComponent implements OnInit {
 
   constructor(private appService: AppService, private router: Router) { }
 
-  technologies: Technologies[] = [];
-  calendars: Calendar[] = [];
-  trainings: Trainings[] = [];
+  technologies: Technologies[] = []
+  calendars: Calendar[] = []
+  trainings: Trainings[] = []
+  payments: Payment[] = []
 
   ngOnInit() {
     this.userName = sessionStorage.getItem("userName");
@@ -25,7 +27,7 @@ export class MentorComponent implements OnInit {
   }
 
   userName: string
-  currentTab: number
+  currentTab: number = 1
   startDate: NgbDateStruct
   endDate: NgbDateStruct
   startTime: NgbTimeStruct
@@ -127,7 +129,10 @@ export class MentorComponent implements OnInit {
     }
   }
 
-  removeTrainings(id) {
-    return this.appService.removeTrainings(id);
+  getIncome() {
+    this.currentTab = 4;
+    this.appService.getIncome(this.userName).subscribe(data => {
+      this.payments = data;
+    });
   }
 }

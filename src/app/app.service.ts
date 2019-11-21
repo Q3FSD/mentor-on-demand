@@ -6,6 +6,7 @@ import { User } from './models/User';
 import { Calendar } from './models/Calendar';
 import { Technologies } from './models/Technologies';
 import { Trainings } from './models/Trainings';
+import { Payment } from './models/Payment';
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +17,7 @@ export class AppService {
 
   private userUrl = "http://localhost:8080";
   private trainingUrl = "http://localhost:8081";
+  private payUrl = "http://localhost:8082";
 
   register(user: User) {
     this.http.post<User>(this.userUrl + "/v1/user/add",
@@ -282,47 +284,44 @@ export class AppService {
         (data) => {
           console.log("POST call successful value returned in body",
             data);
-          alert("Your training is booked.");
+          alert("Your trainings are booked.");
         },
         response => {
           console.log("POST call in error", response);
-          alert("Your training is booked.");
+          alert("Your trainings are booked.");
         },
         () => {
           console.log("The POST observable is now completed.");
         });
   }
 
-  studentBook(studentName, trainingId) {
+  studentBook(studentName, ids) {
     const httpOptions = {
       headers: new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' })
     };
-    const params = "studentName=" + studentName + "&trainingId=" + trainingId;
+    const params = "studentName=" + studentName + "&ids=" + ids;
     return this.http.post(this.trainingUrl + "/v1/training/student", params, httpOptions)
       .subscribe(
         (data) => {
           console.log("POST call successful value returned in body",
             data);
-          alert("Your training is booked.");
+          alert("Your trainings are booked.");
         },
         response => {
           console.log("POST call in error", response);
-          alert("Your training is booked.");
+          alert("Your trainings are booked.");
         },
         () => {
           console.log("The POST observable is now completed.");
         });
   }
 
-  bookCourse(id) {
-
+  pay(payment: Payment) {
+    return this.http.post<Payment>(this.payUrl + "/v1/pay/pay",
+      payment);
   }
 
-  addOrUpdateCourse(id) {
-
-  }
-
-  changeFee(id, fee) {
-
+  getIncome(mentorName): Observable<Payment[]> {
+    return this.http.get<Payment[]>(this.payUrl + "/v1/pay/all/" + mentorName);
   }
 }

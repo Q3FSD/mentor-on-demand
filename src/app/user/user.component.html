@@ -22,43 +22,51 @@
         <button class="btn btn-outline-success my-2 my-sm-0" type="button" (click)="search()">Search</button>
     </div>
 </nav>
-<ul class="nav nav-tabs justify-content-center">
-    <li class="nav-item">
-        <a class="nav-link active" href="#">Search Trainings</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="#">Current Trainings</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="#">Completed Trainings</a>
-    </li>
-</ul>
+<br />
+<div class="row">
+    <div class="col text-center">
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">Book trainings</button>
+    </div>
+</div>
+<div class="modal fade" id="myModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Choose your payment type</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                Total amount : $ {{fees | number}}<br />
+                <select class="form-control" [(ngModel)]="txnType">
+                    <option value="PayPal" selected>PayPal</option>
+                    <option value="Apple Pay">Apple Pay</option>
+                </select>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                    (click)="bookTrainings()">Pay</button>
+            </div>
+        </div>
+    </div>
+</div>
+<br />
 <div class="list-group">
-    <a href="#" class="list-group-item list-group-item-action active">
+    <li class="list-group-item list-group-item-action" *ngFor="let training of trainings; let i = index">
         <div class="d-flex w-100 justify-content-between">
-            <h5 class="mb-1">List group item heading</h5>
-            <small>3 days ago</small>
+            <h5 class="mb-1">Name : {{training.name}}</h5>
+            <small>
+                <ui-switch [(ngModel)]="books[i]"></ui-switch>
+            </small>
         </div>
-        <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.
-        </p>
-        <small>Donec id elit non mi porta.</small>
-    </a>
-    <a href="#" class="list-group-item list-group-item-action">
-        <div class="d-flex w-100 justify-content-between">
-            <h5 class="mb-1">List group item heading</h5>
-            <small class="text-muted">3 days ago</small>
+        <p class="mb-1">Fee : $ {{training.fees}}</p>
+        <small>Mentor : {{training.mentorName}}</small>
+        <div *ngIf="training.mentorName">
+            Training Time :<br />
+            <small *ngFor="let calendar of calendars">
+                {{calendar.startDate | date:'yyyy-MM-dd HH:mm':'CST'}} ~
+                {{calendar.endDate | date:'yyyy-MM-dd HH:mm':'CST'}}
+                <br />
+            </small>
         </div>
-        <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.
-        </p>
-        <small class="text-muted">Donec id elit non mi porta.</small>
-    </a>
-    <a href="#" class="list-group-item list-group-item-action">
-        <div class="d-flex w-100 justify-content-between">
-            <h5 class="mb-1">List group item heading</h5>
-            <small class="text-muted">3 days ago</small>
-        </div>
-        <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.
-        </p>
-        <small class="text-muted">Donec id elit non mi porta.</small>
-    </a>
+    </li>
 </div>
