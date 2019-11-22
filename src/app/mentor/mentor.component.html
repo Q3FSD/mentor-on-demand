@@ -136,9 +136,9 @@
     <li class="list-group-item list-group-item-action" *ngFor="let payment of payments">
         <div class="d-flex w-100 justify-content-between">
             <h5 class="mb-1">Amount : $ {{payment.amount}}</h5>
-            <small>Paid</small>
+            <small>From : {{payment.userName}}</small>
         </div>
-        <p class="mb-1">From : {{payment.userName}}</p>
+        <p class="mb-1">Transaction Time : {{payment.txnTime | date:'yyyy-MM-dd HH:mm':'CST'}}</p>
         <small>Transaction Type : {{payment.txnType}}</small>
     </li>
 </div>

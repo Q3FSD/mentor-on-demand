@@ -15,13 +15,33 @@ export class AppService {
 
   constructor(private http: HttpClient, private router: Router) { }
 
-  private userUrl = "http://localhost:8080";
-  private trainingUrl = "http://localhost:8081";
-  private payUrl = "http://localhost:8082";
+  private clientId = "rfV%HjsDhKf23S-jBXN+*v%LVZCnVd!+8wh6cd58b=eW&q_q?KPF7N?wZ?c9V-d^";
+  private clientSecret = "dJZRdsAG*X2jZn2aJKT+ZLXX+z=t2&XDD7xU=-&5hymGGgq+EvP!$?bt!BA9cVBj";
+  private credentials = this.clientId + ":" + this.clientSecret;
+  private auth = "Basic " + btoa(this.credentials);
+  private username = "admin";
+  private password = "q3fsd";
 
-  register(user: User) {
+  private authUrl = "http://localhost:8762/oauth/token";
+  private userUrl = "http://localhost:8762/user-service";
+  private trainingUrl = "http://localhost:8762/training-service";
+  private payUrl = "http://localhost:8762/payment-service";
+
+  getToken() {
+    const httpOptions = {
+      headers: new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': this.auth })
+    };
+    const params = "grant_type=password&username=" + this.username + "&password=" + this.password;
+    return this.http.post(this.authUrl, params, httpOptions).toPromise();
+  }
+
+  async register(user: User) {
+    let data = await this.getToken();
+    const httpOptions = {
+      headers: new HttpHeaders({ 'Authorization': "Bearer " + data['access_token'] })
+    };
     this.http.post<User>(this.userUrl + "/v1/user/add",
-      user)
+      user, httpOptions)
       .subscribe(
         (data) => {
           console.log("POST call successful value returned in body",
@@ -47,9 +67,13 @@ export class AppService {
         });
   }
 
-  login(user: User) {
+  async login(user: User) {
+    let data = await this.getToken();
+    const httpOptions = {
+      headers: new HttpHeaders({ 'Authorization': "Bearer " + data['access_token'] })
+    };
     this.http.post<User>(this.userUrl + "/v1/user/login",
-      user)
+      user, httpOptions)
       .subscribe(
         (data) => {
           console.log("POST call successful value returned in body",
@@ -78,9 +102,13 @@ export class AppService {
         });
   }
 
-  reset(user: User) {
+  async reset(user: User) {
+    let data = await this.getToken();
+    const httpOptions = {
+      headers: new HttpHeaders({ 'Authorization': "Bearer " + data['access_token'] })
+    };
     this.http.post<User>(this.userUrl + "/v1/user/reset",
-      user)
+      user, httpOptions)
       .subscribe(
         (data) => {
           console.log("POST call successful value returned in body",
@@ -108,12 +136,20 @@ export class AppService {
         });
   }
 
-  getUsers(): Observable<User[]> {
-    return this.http.get<User[]>(this.userUrl + "/v1/user/all");
+  async getUsers(): Promise<User[]> {
+    let data = await this.getToken();
+    const httpOptions = {
+      headers: new HttpHeaders({ 'Authorization': "Bearer " + data['access_token'] })
+    };
+    return this.http.get<User[]>(this.userUrl + "/v1/user/all", httpOptions).toPromise();
   }
 
-  removeUser(userName) {
-    return this.http.delete(this.userUrl + "/v1/user/remove/" + userName)
+  async removeUser(userName) {
+    let data = await this.getToken();
+    const httpOptions = {
+      headers: new HttpHeaders({ 'Authorization': "Bearer " + data['access_token'] })
+    };
+    return this.http.delete(this.userUrl + "/v1/user/remove/" + userName, httpOptions)
       .subscribe(
         (data) => {
           console.log("POST call successful value returned in body",
@@ -129,13 +165,18 @@ export class AppService {
         });
   }
 
-  getCalendar(userName): Observable<Calendar[]> {
-    return this.http.get<Calendar[]>(this.userUrl + "/v1/mc/all/" + userName);
+  async getCalendar(userName): Promise<Calendar[]> {
+    let data = await this.getToken();
+    const httpOptions = {
+      headers: new HttpHeaders({ 'Authorization': "Bearer " + data['access_token'] })
+    };
+    return this.http.get<Calendar[]>(this.userUrl + "/v1/mc/all/" + userName, httpOptions).toPromise();
   }
 
-  addCalendar(userName, startDate, endDate) {
+  async addCalendar(userName, startDate, endDate) {
+    let data = await this.getToken();
     const httpOptions = {
-      headers: new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' })
+      headers: new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': "Bearer " + data['access_token'] })
     };
     const params = "userName=" + userName + "&startDate=" + startDate + "&endDate=" + endDate;
     return this.http.post<Calendar>(this.userUrl + "/v1/mc/add", params, httpOptions)
@@ -154,8 +195,12 @@ export class AppService {
         });
   }
 
-  removeCalendar(userName, startDate, endDate) {
-    return this.http.delete(this.userUrl + "/v1/mc/remove/" + userName + "/" + startDate + "/" + endDate)
+  async removeCalendar(userName, startDate, endDate) {
+    let data = await this.getToken();
+    const httpOptions = {
+      headers: new HttpHeaders({ 'Authorization': "Bearer " + data['access_token'] })
+    };
+    return this.http.delete(this.userUrl + "/v1/mc/remove/" + userName + "/" + startDate + "/" + endDate, httpOptions)
       .subscribe(
         (data) => {
           console.log("POST call successful value returned in body",
@@ -171,13 +216,21 @@ export class AppService {
         });
   }
 
-  getTechnologies(): Observable<Technologies[]> {
-    return this.http.get<Technologies[]>(this.userUrl + "/v1/tech/all");
+  async getTechnologies(): Promise<Technologies[]> {
+    let data = await this.getToken();
+    const httpOptions = {
+      headers: new HttpHeaders({ 'Authorization': "Bearer " + data['access_token'] })
+    };
+    return this.http.get<Technologies[]>(this.userUrl + "/v1/tech/all", httpOptions).toPromise();
   }
 
-  addTechnologies(technologies: Technologies) {
+  async addTechnologies(technologies: Technologies) {
+    let data = await this.getToken();
+    const httpOptions = {
+      headers: new HttpHeaders({ 'Authorization': "Bearer " + data['access_token'] })
+    };
     return this.http.post<Technologies>(this.userUrl + "/v1/tech/add",
-      technologies)
+      technologies, httpOptions)
       .subscribe(
         (data) => {
           console.log("POST call successful value returned in body",
@@ -193,8 +246,12 @@ export class AppService {
         });
   }
 
-  removeTechnologies(skillName) {
-    return this.http.delete<Technologies>(this.userUrl + "/v1/tech/remove/" + skillName)
+  async removeTechnologies(skillName) {
+    let data = await this.getToken();
+    const httpOptions = {
+      headers: new HttpHeaders({ 'Authorization': "Bearer " + data['access_token'] })
+    };
+    return this.http.delete<Technologies>(this.userUrl + "/v1/tech/remove/" + skillName, httpOptions)
       .subscribe(
         (data) => {
           console.log("POST call successful value returned in body",
@@ -210,13 +267,18 @@ export class AppService {
         });
   }
 
-  getSkills(userName) {
-    return this.http.get<JSON[]>(this.userUrl + "/v1/ms/all/" + userName);
+  async getSkills(userName) {
+    let data = await this.getToken();
+    const httpOptions = {
+      headers: new HttpHeaders({ 'Authorization': "Bearer " + data['access_token'] })
+    };
+    return this.http.get<JSON[]>(this.userUrl + "/v1/ms/all/" + userName, httpOptions);
   }
 
-  saveSkills(userName, skillNames) {
+  async saveSkills(userName, skillNames) {
+    let data = await this.getToken();
     const httpOptions = {
-      headers: new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' })
+      headers: new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': "Bearer " + data['access_token'] })
     };
     const params = "userName=" + userName + "&skillNames=" + skillNames;
     return this.http.post(this.userUrl + "/v1/ms/save", params, httpOptions)
@@ -235,9 +297,13 @@ export class AppService {
         });
   }
 
-  addTrainings(trainings: Trainings) {
+  async addTrainings(trainings: Trainings) {
+    let data = await this.getToken();
+    const httpOptions = {
+      headers: new HttpHeaders({ 'Authorization': "Bearer " + data['access_token'] })
+    };
     return this.http.post<Trainings>(this.trainingUrl + "/v1/training/add",
-      trainings)
+      trainings, httpOptions)
       .subscribe(
         (data) => {
           console.log("POST call successful value returned in body",
@@ -253,8 +319,12 @@ export class AppService {
         });
   }
 
-  removeTrainings(id) {
-    return this.http.delete<Trainings>(this.trainingUrl + "/v1/training/remove/" + id)
+  async removeTrainings(id) {
+    let data = await this.getToken();
+    const httpOptions = {
+      headers: new HttpHeaders({ 'Authorization': "Bearer " + data['access_token'] })
+    };
+    return this.http.delete<Trainings>(this.trainingUrl + "/v1/training/remove/" + id, httpOptions)
       .subscribe(
         (data) => {
           console.log("POST call successful value returned in body",
@@ -270,13 +340,18 @@ export class AppService {
         });
   }
 
-  search(keyword): Observable<Trainings[]> {
-    return this.http.get<Trainings[]>(this.trainingUrl + "/v1/training/search?keyword=" + keyword);
+  async search(keyword): Promise<Trainings[]> {
+    let data = await this.getToken();
+    const httpOptions = {
+      headers: new HttpHeaders({ 'Authorization': "Bearer " + data['access_token'] })
+    };
+    return this.http.get<Trainings[]>(this.trainingUrl + "/v1/training/search?keyword=" + keyword, httpOptions).toPromise();
   }
 
-  mentorBook(mentorName, ids) {
+  async mentorBook(mentorName, ids) {
+    let data = await this.getToken();
     const httpOptions = {
-      headers: new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' })
+      headers: new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': "Bearer " + data['access_token'] })
     };
     const params = "mentorName=" + mentorName + "&ids=" + ids;
     return this.http.post(this.trainingUrl + "/v1/training/mentor", params, httpOptions)
@@ -295,9 +370,10 @@ export class AppService {
         });
   }
 
-  studentBook(studentName, ids) {
+  async studentBook(studentName, ids) {
+    let data = await this.getToken();
     const httpOptions = {
-      headers: new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' })
+      headers: new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': "Bearer " + data['access_token'] })
     };
     const params = "studentName=" + studentName + "&ids=" + ids;
     return this.http.post(this.trainingUrl + "/v1/training/student", params, httpOptions)
@@ -316,12 +392,20 @@ export class AppService {
         });
   }
 
-  pay(payment: Payment) {
+  async pay(payment: Payment) {
+    let data = await this.getToken();
+    const httpOptions = {
+      headers: new HttpHeaders({ 'Authorization': "Bearer " + data['access_token'] })
+    };
     return this.http.post<Payment>(this.payUrl + "/v1/pay/pay",
-      payment);
+      payment, httpOptions);
   }
 
-  getIncome(mentorName): Observable<Payment[]> {
-    return this.http.get<Payment[]>(this.payUrl + "/v1/pay/all/" + mentorName);
+  async getIncome(mentorName): Promise<Payment[]> {
+    let data = await this.getToken();
+    const httpOptions = {
+      headers: new HttpHeaders({ 'Authorization': "Bearer " + data['access_token'] })
+    };
+    return this.http.get<Payment[]>(this.payUrl + "/v1/pay/all/" + mentorName, httpOptions).toPromise();
   }
 }

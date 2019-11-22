@@ -44,7 +44,7 @@ export class MentorComponent implements OnInit {
 
   getTechnologies() {
     this.currentTab = 1;
-    this.appService.getTechnologies().subscribe(data => {
+    this.appService.getTechnologies().then(data => {
       this.technologies = data;
     });
     this.getSkills(this.userName);
@@ -62,7 +62,7 @@ export class MentorComponent implements OnInit {
   }
 
   getSkills(userName) {
-    return this.appService.getSkills(userName).subscribe(
+    return this.appService.getSkills(userName).then(
       (data) => {
         console.log("POST call successful value returned in body",
           data);
@@ -70,9 +70,6 @@ export class MentorComponent implements OnInit {
       },
       response => {
         console.log("POST call in error", response);
-      },
-      () => {
-        console.log("The POST observable is now completed.");
       });
   }
 
@@ -86,7 +83,7 @@ export class MentorComponent implements OnInit {
 
   getCalendar() {
     this.currentTab = 2;
-    this.appService.getCalendar(this.userName).subscribe(data => {
+    this.appService.getCalendar(this.userName).then(data => {
       this.calendars = data;
     });
   }
@@ -103,7 +100,7 @@ export class MentorComponent implements OnInit {
 
   search() {
     this.currentTab = 3;
-    this.appService.search(this.keyword).subscribe(data => {
+    this.appService.search(this.keyword).then(data => {
       this.trainings = data;
       data.forEach((val, idx, array) => {
         if (val.mentorName == this.userName) {
@@ -131,7 +128,7 @@ export class MentorComponent implements OnInit {
 
   getIncome() {
     this.currentTab = 4;
-    this.appService.getIncome(this.userName).subscribe(data => {
+    this.appService.getIncome(this.userName).then(data => {
       this.payments = data;
     });
   }

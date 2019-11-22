@@ -4,4 +4,5 @@ export class Payment {
     txnType: string
     userName: string
     mentorName: string
+    txnTime?: string
 }

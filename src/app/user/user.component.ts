@@ -37,7 +37,7 @@ export class UserComponent implements OnInit {
 
   search() {
     this.fees = 0
-    this.appService.search(this.keyword).subscribe(data => {
+    this.appService.search(this.keyword).then(data => {
       this.trainings = data;
       data.forEach((val, idx, array) => {
         if (val.userName == this.userName) {
@@ -48,7 +48,7 @@ export class UserComponent implements OnInit {
         }
         if (val.mentorName) {
           this.mentorName = val.mentorName
-          this.appService.getCalendar(val.mentorName).subscribe(data => {
+          this.appService.getCalendar(val.mentorName).then(data => {
             this.calendars = data;
           });
         }
@@ -72,7 +72,7 @@ export class UserComponent implements OnInit {
         mentorName: this.mentorName,
         txnType: this.txnType
       };
-      this.appService.pay(payment).subscribe(
+      this.appService.pay(payment).then(
         (data) => {
           console.log("POST call successful value returned in body",
             data);
@@ -81,9 +81,6 @@ export class UserComponent implements OnInit {
         response => {
           console.log("POST call in error", response);
           alert("Pay failed. Please try again.");
-        },
-        () => {
-          console.log("The POST observable is now completed.");
         });
     }
   }

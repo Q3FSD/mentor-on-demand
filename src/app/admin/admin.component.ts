@@ -20,9 +20,9 @@ export class AdminComponent implements OnInit {
 
   ngOnInit() {
     this.userName = sessionStorage.getItem("userName");
-    this.appService.getUsers().subscribe(data =>
+    this.appService.getUsers().then(data =>
       this.users = data);
-    this.appService.getTechnologies().subscribe(data =>
+    this.appService.getTechnologies().then(data =>
       this.technologies = data);
   }
 
@@ -59,7 +59,7 @@ export class AdminComponent implements OnInit {
 
   search() {
     this.currentTab = 3;
-    this.appService.search(this.keyword).subscribe(data =>
+    this.appService.search(this.keyword).then(data =>
       this.trainings = data);
   }
 
