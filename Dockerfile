@@ -5,7 +5,7 @@ FROM httpd:2-alpine
 ENV TZ Asia/Shanghai
 
 # The application's static files
-RUN ng build --prod
+RUN apk add --update nodejs-npm && npm install -g @angular/cli && ng build --prod
 
 # Copy angular dist folder to the container 
 COPY dist/ /usr/local/apache2/htdocs/
