@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
 import { User } from './models/User';
 import { Calendar } from './models/Calendar';
 import { Technologies } from './models/Technologies';
@@ -19,13 +18,13 @@ export class AppService {
   private clientSecret = "dJZRdsAG*X2jZn2aJKT+ZLXX+z=t2&XDD7xU=-&5hymGGgq+EvP!$?bt!BA9cVBj";
   private credentials = this.clientId + ":" + this.clientSecret;
   private auth = "Basic " + btoa(this.credentials);
-  private username = "admin";
+  private username = "oauth2";
   private password = "q3fsd";
 
-  private authUrl = "http://localhost:8762/oauth/token";
-  private userUrl = "http://localhost:8762/user-service";
-  private trainingUrl = "http://localhost:8762/training-service";
-  private payUrl = "http://localhost:8762/payment-service";
+  private authUrl = "http://172.17.0.5:8762/oauth/token";
+  private userUrl = "http://172.17.0.5:8762/user-service";
+  private trainingUrl = "http://172.17.0.5:8762/training-service";
+  private payUrl = "http://172.17.0.5:8762/payment-service";
 
   getToken() {
     const httpOptions = {
