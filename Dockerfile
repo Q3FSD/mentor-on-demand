@@ -4,12 +4,8 @@ FROM httpd:2-alpine
 # Set Env
 ENV TZ Asia/Shanghai
 
-# Copy angular project folder to the container
-COPY ./ /usr/mentor-on-demand
-WORKDIR /usr/mentor-on-demand
-
-# Build and copy angular dist folder in the container
-RUN apk add --update nodejs-npm && npm install -g @angular/cli && ng build --prod && mv dist/ /usr/local/apache2/htdocs/
+# Copy angular dist folder to container 
+COPY dist/ /usr/local/apache2/htdocs/
 
 # Copy htaccess and httpd.conf to the container
 COPY .htaccess /usr/local/apache2/htdocs/
