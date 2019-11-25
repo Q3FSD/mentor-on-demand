@@ -21,10 +21,10 @@ export class AppService {
   private username = "oauth2";
   private password = "q3fsd";
 
-  private authUrl = "http://172.17.0.5:8762/oauth/token";
-  private userUrl = "http://172.17.0.5:8762/user-service";
-  private trainingUrl = "http://172.17.0.5:8762/training-service";
-  private payUrl = "http://172.17.0.5:8762/payment-service";
+  private authUrl = "http://111.231.63.123:8762/oauth/token";
+  private userUrl = "http://111.231.63.123:8762/user-service";
+  private trainingUrl = "http://111.231.63.123:8762/training-service";
+  private payUrl = "http://111.231.63.123:8762/payment-service";
 
   getToken() {
     const httpOptions = {
