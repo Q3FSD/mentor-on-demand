@@ -5,7 +5,7 @@ FROM httpd:2-alpine
 ENV TZ Asia/Shanghai
 
 # Copy angular dist folder to container 
-COPY dist/ /usr/local/apache2/htdocs/
+COPY dist/mentor-on-demand/ /usr/local/apache2/htdocs/
 
 # Copy httpd.conf to container
 COPY httpd.conf /usr/local/apache2/conf/httpd.conf
